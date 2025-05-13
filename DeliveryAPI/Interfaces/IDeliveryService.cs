@@ -5,11 +5,11 @@ namespace DeliveryAPI.Interfaces
 {
     public interface IDeliveryService
     {
-        public bool AddNewDelivery(Delivery delivery);
-        public List<Delivery> ShowAllDeliveries();
-        public bool ChangeDelivery(Delivery delivery);
-        public bool RemoveNewDelivery(int id);
-        public bool NextStage(int id);
-        public List<Delivery> SearchDeliveriesByText(string text);
+        public Task<bool> AddNewDelivery(Delivery delivery);
+        public Task<List<Delivery>> ShowAllDeliveries();
+        public Task<bool> ChangeDelivery(Delivery delivery);
+        public Task<bool> RemoveNewDelivery(int id);
+        public Task<bool> NextStage(int id);
+        public Task<List<Delivery>> SearchDeliveriesByText(string text);
     }
 }

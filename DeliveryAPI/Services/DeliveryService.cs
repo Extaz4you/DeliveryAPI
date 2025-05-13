@@ -17,19 +17,19 @@ namespace DeliveryAPI.Services
             context = deliveryContext;
         }
 
-        public bool AddNewDelivery(Delivery delivery)
+        public async Task<bool> AddNewDelivery(Delivery delivery)
         {
             if (delivery == null) return false;
-            context.Deliveries.Add(delivery);
-            context.SaveChanges();
+            await context.Deliveries.AddAsync(delivery);
+            await context.SaveChangesAsync();
             return true;
         }
 
-        public bool ChangeDelivery(Delivery delivery)
+        public async Task<bool> ChangeDelivery(Delivery delivery)
         {
             if (delivery == null) return false;
             if (delivery.Status != "Новая") return false;
-            var deliveryForEdit = context.Deliveries.Find(delivery.Id);
+            var deliveryForEdit = await context.Deliveries.FindAsync(delivery.Id);
             if (deliveryForEdit == null) return false;
             deliveryForEdit.DeliveryTime = delivery.DeliveryTime;
             deliveryForEdit.DeliveryAddress = delivery.DeliveryAddress;
@@ -37,50 +37,48 @@ namespace DeliveryAPI.Services
             deliveryForEdit.ClientName = delivery.ClientName;
             deliveryForEdit.CancellationReason = delivery.CancellationReason;
             deliveryForEdit.Status = delivery.Status;
+            await context.SaveChangesAsync();
             return true;
         }
 
-        public bool NextStage(int id)
+        public async Task<bool> NextStage(int id)
         {
-            var deliveryForEdit = context.Deliveries.Find(id);
+            var deliveryForEdit = await context.Deliveries.FindAsync(id);
             if (deliveryForEdit == null) return false;
             deliveryForEdit.Status = "Передано на выполнение";
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return true;
         }
 
-        public bool RemoveNewDelivery(int id)
+        public async Task<bool> RemoveNewDelivery(int id)
         {
-            var delivery = context.Deliveries.FirstOrDefault(x => x.Id == id);
+            var delivery = await context.Deliveries.FirstOrDefaultAsync(x => x.Id == id);
             if (delivery == null) return false;
             context.Deliveries.Remove(delivery);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return true;
         }
 
-        public List<Delivery> SearchDeliveriesByText(string text)
+        public async Task<List<Delivery>> SearchDeliveriesByText(string text)
         {
-            var allDeliveries = context.Deliveries.ToList();
-            if (!allDeliveries.Any()) return new List<Delivery>();
-            if (!string.IsNullOrEmpty(text))
-            {
-                var findedRows = allDeliveries.Where(d =>
+            var deliveriesQuery = context.Deliveries.AsQueryable();
+
+            if (!string.IsNullOrEmpty(text)) return new List<Delivery>();
+
+            deliveriesQuery = deliveriesQuery.Where(d =>
                 d.Status.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                 d.CargoDescription.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                 d.CancellationReason.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                 d.ClientName.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                d.DeliveryAddress.Contains(text, StringComparison.OrdinalIgnoreCase)).ToList();
-                if(findedRows.Any()) return findedRows;
-                else return new List<Delivery>();
-            }
-            return allDeliveries;
+                d.DeliveryAddress.Contains(text, StringComparison.OrdinalIgnoreCase));
+
+
+            return await deliveriesQuery.ToListAsync();
         }
 
-        public List<Delivery> ShowAllDeliveries()
+        public async Task<List<Delivery>> ShowAllDeliveries()
         {
-            var allDeliveries = context.Deliveries.ToList();
-            if (allDeliveries.Any()) return allDeliveries;
-            else return new List<Delivery>();
+            return await context.Deliveries.ToListAsync();
         }
     }
 }

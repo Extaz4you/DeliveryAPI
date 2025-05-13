@@ -15,9 +15,9 @@ namespace DeliveryAPI.Controllers
             deliveryService = service;
         }
         [HttpPost("AddNewDelivery")]
-        public ActionResult AddNewDelivery(Delivery delivery)
+        public async Task<ActionResult> AddNewDelivery(Delivery delivery)
         {
-            if (deliveryService.AddNewDelivery(delivery))
+            if (await deliveryService.AddNewDelivery(delivery))
             {
                 return Ok(delivery.Id);
             }
@@ -28,16 +28,16 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpGet("ShowAllDeliveries")]
-        public ActionResult<List<Delivery>> ShowAllDeliveries()
+        public async Task<ActionResult<List<Delivery>>> ShowAllDeliveries()
         {
-            var deliveries = deliveryService.ShowAllDeliveries();
+            var deliveries = await deliveryService.ShowAllDeliveries();
             return Ok(deliveries);
         }
 
         [HttpPut("ChangeDelivery")]
-        public ActionResult ChangeDelivery(Delivery delivery)
+        public async Task<ActionResult> ChangeDelivery(Delivery delivery)
         {
-            if (deliveryService.ChangeDelivery(delivery))
+            if (await deliveryService.ChangeDelivery(delivery))
             {
                 return Ok(delivery.Id);
             }
@@ -48,9 +48,9 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpDelete("RemoveNewDelivery/{id}")]
-        public ActionResult RemoveNewDelivery(int id)
+        public async Task<ActionResult> RemoveNewDelivery(int id)
         {
-            if (deliveryService.RemoveNewDelivery(id))
+            if (await deliveryService.RemoveNewDelivery(id))
             {
                 return Ok();
             }
@@ -61,9 +61,9 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpPost("NextStage/{id}")]
-        public ActionResult NextStage(int id)
+        public async Task<ActionResult> NextStage(int id)
         {
-            if (deliveryService.NextStage(id))
+            if (await deliveryService.NextStage(id))
             {
                 return Ok();
             }
@@ -74,9 +74,9 @@ namespace DeliveryAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<Delivery>> GetDeliveryByText(string text)
+        public async Task<ActionResult<List<Delivery>>> GetDeliveryByText(string text)
         {
-            var delivery = deliveryService.SearchDeliveriesByText(text);
+            var delivery = await deliveryService.SearchDeliveriesByText(text);
             if (delivery == null)
             {
                 return NotFound();
