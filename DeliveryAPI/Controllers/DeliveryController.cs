@@ -1,7 +1,9 @@
-﻿using DeliveryAPI.Interfaces;
+﻿using DeliveryAPI.Data;
+using DeliveryAPI.Interfaces;
 using DeliveryAPI.Models;
 using DeliveryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryAPI.Controllers
 {
@@ -91,6 +93,12 @@ namespace DeliveryAPI.Controllers
                 return NotFound();
             }
             return Ok(delivery);
+        }
+        [HttpGet]
+        public void CreateDb([FromServices] DeliveryContext context, [FromServices] ILogger<DeliveryController> logger)
+        {
+            logger.LogInformation(context.Database.GetConnectionString());
+            context.Database.EnsureCreated();
         }
     }
 

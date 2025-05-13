@@ -1,4 +1,6 @@
-﻿namespace DeliveryAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DeliveryAPI.Models
 {
     public class Delivery
     {
