@@ -10,10 +10,15 @@ namespace DeliveryAPI.Controllers
     public class DeliveryController : Controller
     {
         private IDeliveryService deliveryService;
-        public DeliveryController(IDeliveryService service)
+        private ILogger<DeliveryController> logger;
+
+        public DeliveryController(IDeliveryService service, ILogger<DeliveryController> deliveryLogger)
         {
             deliveryService = service;
+            logger = deliveryLogger;
         }
+
+
         [HttpPost("AddNewDelivery")]
         public async Task<ActionResult> AddNewDelivery(Delivery delivery)
         {
@@ -23,6 +28,7 @@ namespace DeliveryAPI.Controllers
             }
             else
             {
+                logger.LogInformation("Ошибка при добавлении данных");
                 return BadRequest("Ошибка при добавлении");
             }
         }
@@ -43,6 +49,7 @@ namespace DeliveryAPI.Controllers
             }
             else
             {
+                logger.LogInformation("Ошибка при обновлении данных");
                 return BadRequest("Ошибка при обновлении");
             }
         }
@@ -56,6 +63,7 @@ namespace DeliveryAPI.Controllers
             }
             else
             {
+                logger.LogInformation("Попытка удалить несуществующую запись");
                 return NotFound($"Заявка не существует");
             }
         }
@@ -69,6 +77,7 @@ namespace DeliveryAPI.Controllers
             }
             else
             {
+                logger.LogInformation("Ошибка при изменении стадии");
                 return NotFound($"Заявка не существует");
             }
         }
