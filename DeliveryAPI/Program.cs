@@ -15,7 +15,7 @@ namespace DeliveryAPI
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c=>c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "DeliveryAPI", Version = "v1"}));
-            builder.Services.AddDbContext<DeliveryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString(ApiConstant.ConnectionString)));
+            builder.Services.AddDbContext<DeliveryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DeliveryDb")));
             builder.Services.AddScoped<IDeliveryService, DeliveryService>();
             var app = builder.Build();
 

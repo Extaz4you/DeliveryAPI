@@ -20,7 +20,7 @@ namespace DeliveryAPI.Services
         public async Task<bool> AddNewDelivery(Delivery delivery)
         {
             if (delivery == null) return false;
-            await context.Deliveries.AddAsync(delivery);
+            context.Deliveries.Add(delivery);
             await context.SaveChangesAsync();
             return true;
         }
@@ -61,19 +61,15 @@ namespace DeliveryAPI.Services
 
         public async Task<List<Delivery>> SearchDeliveriesByText(string text)
         {
-            var deliveriesQuery = context.Deliveries.AsQueryable();
+            var lowerText = text.ToLower();
+            if (string.IsNullOrEmpty(text)) return new List<Delivery>();
 
-            if (!string.IsNullOrEmpty(text)) return new List<Delivery>();
-
-            deliveriesQuery = deliveriesQuery.Where(d =>
-                d.Status.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                d.CargoDescription.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                d.CancellationReason.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                d.ClientName.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-                d.DeliveryAddress.Contains(text, StringComparison.OrdinalIgnoreCase));
-
-
-            return await deliveriesQuery.ToListAsync();
+            return await context.Deliveries.Where(d =>
+                d.Status.ToLower().Contains(lowerText) ||
+                d.CargoDescription.ToLower().Contains(lowerText) ||
+                d.CancellationReason.ToLower().Contains(lowerText) ||
+                d.ClientName.ToLower().Contains(lowerText) ||
+                d.DeliveryAddress.ToLower().Contains(lowerText)).ToListAsync();
         }
 
         public async Task<List<Delivery>> ShowAllDeliveries()
