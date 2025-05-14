@@ -4,6 +4,7 @@ using DeliveryAPI.Interfaces;
 using DeliveryAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
 
 namespace DeliveryAPI
 {
@@ -21,24 +22,19 @@ namespace DeliveryAPI
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "DeliveryAPI", Version = "v1" }));
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c => 
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
             builder.Services.AddDbContext<DeliveryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+
             var app = builder.Build();
 
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var db = scope.ServiceProvider.GetRequiredService<DeliveryContext>();
-            //    db.Database.EnsureCreated();
-            //}
-
             app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "DeliveryAPI_v1");
-            //    c.RoutePrefix = string.Empty;
-            //});
             app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
