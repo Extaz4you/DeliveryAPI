@@ -23,13 +23,20 @@ API включает методы для добавления, изменени�
 - Создать файл .env
 
 **В файл поместить слеющие строки**
+
 DB_USER=sa
+
 DB_PASSWORD=Str0ngP@ssword!.
+
 DB_NAME=DeliveryAPI
+
 DB_PORT=1433
+
 ASPNETCORE_ENVIRONMENT=Development
+
 DefaultConnection=Server=sqlserver;TrustServerCertificate=True;Database=DevileryDb;User Id=sa;Password=Str0ngP@ssword!.
-  
+
+ 
 - Открыть консоль и прописать docker-compose up -d --build
 - Дождаться загрузки, убедиться что оба контейнера работают. Перейти по http://localhost:3333/swagger и вызвать метод CreateDb()
   
