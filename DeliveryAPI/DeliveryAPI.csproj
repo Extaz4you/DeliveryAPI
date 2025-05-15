@@ -13,7 +13,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <OpenApiReference Include="OpenAPIs\swagger1.json" CodeGenerator="NSwagCSharp" ClassName="DelAPI">
+	  <None Include="OpenAPIs\swagger1.json" ClassName="DelAPI" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <OpenApiReference Include="OpenAPIs\swagger2.json" CodeGenerator="NSwagCSharp" ClassName="DelServiceApi">
 	    <SourceUri>http://localhost:3333/swagger/v1/swagger.json</SourceUri>
 	  </OpenApiReference>
 	</ItemGroup>
