@@ -28,7 +28,7 @@ namespace DeliveryAPI.Services
         public async Task<bool> ChangeDelivery(Delivery delivery)
         {
             if (delivery == null) return false;
-            if (delivery.Status != "Новая") return false;
+            if (delivery.Status == "Новая") return false;
             var deliveryForEdit = await context.Deliveries.FindAsync(delivery.Id);
             if (deliveryForEdit == null) return false;
             deliveryForEdit.DeliveryTime = delivery.DeliveryTime;

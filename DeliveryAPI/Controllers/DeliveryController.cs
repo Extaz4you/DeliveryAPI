@@ -111,7 +111,7 @@ namespace DeliveryAPI.Controllers
         /// </summary>
         /// <param name="text">Текст для поиска по доставкам.</param>
         /// <returns>Список найденных доставок.</returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetDeliveryByText/{text}")]
         public async Task<ActionResult<List<Delivery>>> GetDeliveryByText(string text)
         {
             var delivery = await deliveryService.SearchDeliveriesByText(text);
